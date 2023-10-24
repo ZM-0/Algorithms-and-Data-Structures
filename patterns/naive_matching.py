@@ -8,14 +8,15 @@
 def naive_match(text: str, pattern: str) -> list[int]:
     """
     Naively finds the occurrences in the text where the pattern matches exactly.
+    Works by manually comparing the pattern at every alignment with the text.
 
     n - number of characters in the text
     m - number of characters in the pattern
     c - number of matches
 
-                        Worst case  Best case
-    Time complexity:    O(n * m)    O(n)
-    Space complexity:   O(c)        O(c)
+                                Worst case  Best case
+    Time complexity:            O(n * m)    O(n)
+    Auxiliary space complexity: O(c)        O(c)
 
     :param text: A text string.
     :param pattern: A pattern string.

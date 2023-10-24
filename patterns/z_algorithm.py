@@ -3,7 +3,6 @@
 # Gusfield's Z-array and Z-array Construction Algorithm
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-from typing import Optional
 
 
 def match(string: str, i: int, j: int) -> int:
@@ -29,8 +28,8 @@ def build_z_array(string: str) -> list[int]:
 
     n - number of characters in the string
 
-    Time complexity:    O(n)
-    Space complexity:   O(n)
+    Time complexity:            O(n)
+    Auxiliary space complexity: O(n)
 
     :param string: A character string.
     :return: The z-array of the string. The value at index i is the length of the longest substring
@@ -39,8 +38,8 @@ def build_z_array(string: str) -> list[int]:
     # The first z-value is trivially the length of the string
     z_array: list[int] = [len(string) for _ in range(len(string))]
 
-    left: Optional[int] = None      # The inclusive startpoint of the z-box ending at right
-    right: Optional[int] = None     # The exclusive endpoint of the rightmost z-box seen so far
+    left: int | None = None     # The inclusive startpoint of the z-box ending at right
+    right: int | None = None    # The exclusive endpoint of the rightmost z-box seen so far
 
     for i in range(1, len(string)):
         if right is None or i >= right:

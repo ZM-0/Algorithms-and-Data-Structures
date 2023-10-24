@@ -3,19 +3,24 @@
 # Exact Pattern Matching Using The Z-array
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
 from z_algorithm import build_z_array
 
 
 def z_match(text: str, pattern: str) -> list[int]:
     """
-    Finds exact matches of the pattern in the text using the z-array of the combined pattern and text.
+    Finds exact matches of the pattern in the text using the z-array of the combined pattern and
+    text.
+    Works by building the z-array for the combined pattern and text, and then using that to find
+    substring matches of the pattern in the text.
 
     n - number of characters in the text
     m - number of characters in the pattern
     c - number of matches
 
-    Time complexity:    O(n + m)
-    Space complexity:   O(n + m + c)
+    Time complexity:            O(n + m)
+    Auxiliary space complexity: O(n + m + c)
 
     :param text: A text string.
     :param pattern: A pattern string.
