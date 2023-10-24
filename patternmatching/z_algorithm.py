@@ -26,6 +26,12 @@ def match(string: str, i: int, j: int) -> int:
 def build_z_array(string: str) -> list[int]:
     """
     Builds the z-array of a string using Gusfield's linear time construction algorithm.
+
+    n - number of characters in the string
+
+    Time complexity:    O(n)
+    Space complexity:   O(n)
+
     :param string: A character string.
     :return: The z-array of the string. The value at index i is the length of the longest substring
     starting at index i inclusive that matches a prefix of the string.
