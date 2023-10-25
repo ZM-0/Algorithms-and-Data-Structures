@@ -26,11 +26,10 @@ class BoyerMooreMatcher:
         self.text_index: int = len(pattern) - 1
         self.pattern_index: int = len(pattern) - 1
 
-        self.extended_bad_characters: list[dict[str, int]] = [dict() for _ in range(len(pattern))]
-        """extended_bad_character_positions[i][c] is the index of the rightmost occurrence of
-        character c in pattern[:i + 1]. If there is no such occurrence of character c, there is no
-        key for c in the dictionary extended_bad_character_positions[i]."""
-        self.build_extended_bad_character_positions()
+        self.bad_characters: list[dict[str, int]] = self.build_bad_characters()
+        """bad_characters[i][c] is the index of the rightmost occurrence of character c in
+        pattern[:i + 1]. If there is no such occurrence of character c, there is no
+        key for c in the dictionary bad_characters[i]."""
 
         self.good_suffixes: list[int] = self.build_good_suffixes()
         """good_suffix[i] is the inclusive endpoint of the rightmost occurrence of pattern[i:] in
@@ -40,16 +39,20 @@ class BoyerMooreMatcher:
         """borders[i] is the length of the longest suffix of pattern[i:] that matches a prefix of
         the pattern."""
 
-    def build_extended_bad_character_positions(self) -> None:
+    def build_bad_characters(self) -> list[dict[str, int]]:
         """
         Finds the rightmost occurrences of each character for each prefix of the pattern.
         This is a list of dictionaries where positions[i][c] is the index of the rightmost occurrence
         of character c in pattern[0:i + 1]. If character c doesn't occur in pattern[0:i + 1], there
         will be no such key c in the relevant dictionary.
         """
+        bad_characters: list[dict[str, int]] = [dict() for _ in range(len(self.pattern))]
+
         for i in range(len(self.pattern)):
             for j in range(i + 1):
-                self.extended_bad_characters[i][self.pattern[j]] = j
+                bad_characters[i][self.pattern[j]] = j
+
+        return bad_characters
 
     def build_good_suffixes(self) -> list[int]:
         """
@@ -62,11 +65,11 @@ class BoyerMooreMatcher:
         z_suffix: list[int] = build_z_array(reversed_pattern)
         z_suffix.reverse()
 
-        good_suffixes: list[int] = [-1 for _ in range(len(self.pattern))]
+        good_suffixes: list[int] = [-1 for _ in range(len(self.pattern) + 1)]
 
         for i in range(len(self.pattern)):
             j: int = len(self.pattern) - z_suffix[i]    # The inclusive start of the matched suffix
-            self.good_suffixes[j] = i
+            good_suffixes[j] = i
 
         return good_suffixes
 
@@ -92,7 +95,7 @@ class BoyerMooreMatcher:
 
         return borders
 
-    def get_extended_bad_character_jump(self) -> int:
+    def get_bad_character_jump(self) -> int:
         """
         :return: The jump length based on the extended bad character rule.
         """
@@ -100,7 +103,7 @@ class BoyerMooreMatcher:
             return 1
 
         bad_character: str = self.text[self.text_index]
-        position: int = self.extended_bad_characters[self.pattern_index - 1].get(bad_character, -1)
+        position: int = self.bad_characters[self.pattern_index - 1].get(bad_character, -1)
         return self.pattern_index - position
 
     def get_good_suffix_jump(self) -> int:
@@ -134,7 +137,7 @@ class BoyerMooreMatcher:
                 matches.append(self.text_index + 1)
             else:
                 # Jump the pattern along the text
-                jump1: int = self.get_extended_bad_character_jump()
+                jump1: int = self.get_bad_character_jump()
                 jump2: int = self.get_good_suffix_jump()
                 jump3: int = self.get_matched_prefix_jump()
                 jump: int
