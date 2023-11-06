@@ -13,6 +13,7 @@ class PrefixDoubler:
         Initializes a prefix-doubling suffix array builder.
         :param string: The string to build the suffix array of.
         """
+        string = string + '$'   # Assume '$' doesn't occur in the string
         self.string: str = string
         self.suffix_array: list[int] = [i for i in range(len(string))]
         self.rank: list[int] = [ord(c) for c in string]    # This already sorts by the first character
